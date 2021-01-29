@@ -13,7 +13,7 @@ public class StudentResource {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Student> getStudent()
     {
-        System.out.println("Workings lalala2..");
+        //System.out.println("GET called..");
         return repo.getStudentList();
     }
 
@@ -37,9 +37,9 @@ public class StudentResource {
     }
 
     @DELETE
-    @Path("student/{index}")
-    public Student deleteStudent(@PathParam("index") int index)
+    @Path("student/{id}")
+    public void deleteStudent(@PathParam("id") int id)
     {
-         return repo.deleteStudent(index);
+          repo.deleteStudent(id);
     }
 }

@@ -2,72 +2,116 @@ package org.example;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.*;
 
 public class StudentRepository {
 
-    List<Student> studentList;
+
+    Connection con=null;
 
     StudentRepository()
     {
-        studentList=new ArrayList<Student>();
 
-        Student student1=new Student(5,"Piyush",22);
-        Student student2=new Student(7,"Ram",23);
+        String url="jdbc:postgresql://localhost:5432/demoDB";
+        String username="postgres";
+        String password="root";
 
-        studentList.add(student1);
-        studentList.add(student2);
+        try {
+            Class.forName("org.postgresql.Driver");
+            con=DriverManager.getConnection(url,username,password);
+
+            if(con!=null)
+            System.out.println("Database connection established.");
+
+        } catch (Exception e) {
+            System.out.println("Connection problem "+e);
+        }
     }
 
     public List<Student> getStudentList()
     {
-        return studentList;
+        List<Student> students = new ArrayList<>();
+        String sql="select * from students";
+
+        try {
+            Statement st = con.createStatement();
+            ResultSet rs=st.executeQuery(sql);
+
+            while(rs.next())
+            {
+                Student student=new Student(rs.getInt(1),rs.getString(2),rs.getInt(3));
+                students.add(student);
+            }
+
+            System.out.println("GET working..!");
+        }
+        catch (Exception e)
+        {
+            System.out.println("Something Wrong: "+e);
+        }
+        return students;
     }
 
 
     public void addStudent(Student student) {
 
-        studentList.add(student);
-        System.out.println("Student added "+ studentList.size());
+        String sql="insert into students values(?,?,?)";
 
-        /*if(studentList.size()==0)
-            System.out.println("Something wrong");
-        System.out.println(studentList.get(0).getName());*/
+        try{
+            PreparedStatement st= con.prepareStatement(sql);
+
+            st.setInt(1,student.getRollNo());
+            st.setString(2,student.getName());
+            st.setInt(3,student.getAge());
+
+            int res=st.executeUpdate();
+            System.out.println("POST working..!");
+        }
+        catch (Exception e)
+        {
+            System.out.println("Something Wrong: "+e);
+        }
+
     }
 
     public void updateStudent(Student student)
     {
-        Student temp=null;
+        String sql="update students set name=? , age=? where rollno=?";
 
-        for(int i=0;i<studentList.size();i++)
-            if(student.getRollNo()==studentList.get(i).getRollNo())
-            {
-                temp=studentList.get(i);
-                break;
-            }
+        try{
+            PreparedStatement st= con.prepareStatement(sql);
 
-        if(temp!=null)
-        {
-            temp.setName(student.getName());
-            temp.setAge(student.getAge());
+            st.setString(1,student.getName());
+            st.setInt(2,student.getAge());
+            st.setInt(3,student.getRollNo());
 
-            System.out.println(student.getName()+ " "+studentList.get(0).getName());
-
+            int res=st.executeUpdate();
+            System.out.println("PUT working..!");
         }
+        catch (Exception e)
+        {
+            System.out.println("Something Wrong: "+e);
+        }
+
     }
 
 
-    public Student deleteStudent(int index) {
+    public void deleteStudent(int rollNo) {
 
-        Student temp=null;
+        String sql="delete from students where rollno=?";
 
-        if(index>=0&&index<studentList.size())
+        try{
+            PreparedStatement st= con.prepareStatement(sql);
+
+            st.setInt(1,rollNo);
+
+            int res=st.executeUpdate();
+            System.out.println("DELETE working..!");
+        }
+        catch (Exception e)
         {
-            temp=studentList.get(index);
-            studentList.remove(index);
-            System.out.println("Student at "+index+" deleted.");
+            System.out.println("Something Wrong: "+e);
         }
 
-        System.out.println(studentList.size());
-        return temp;
     }
 }
