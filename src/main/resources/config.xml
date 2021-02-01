@@ -20,7 +20,7 @@
         </property>
     </bean>
 
-    <bean class="org.example.StudentRepository" name="studentDao">
+    <bean class="org.example.StudentRepositoryHandler" name="studentDao">
     <property name="template" ref="jdbcTemplate"/>
     </bean>
 
