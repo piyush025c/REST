@@ -1,5 +1,9 @@
 package org.example;
 
+import dao.StudentDao;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
@@ -7,14 +11,16 @@ import java.util.List;
 @Path("students")
 public class StudentResource {
 
-    static StudentRepository repo=new StudentRepository();
+
+    static ApplicationContext context=new ClassPathXmlApplicationContext("config.xml");
+    static StudentDao studentDao=context.getBean("studentDao",StudentDao.class);
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Student> getStudent()
     {
-        //System.out.println("GET called..");
-        return repo.getStudentList();
+        System.out.println("GET called..");
+        return studentDao.getStudentList();
     }
 
     @POST
@@ -22,7 +28,7 @@ public class StudentResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Student addStudent(Student student)
     {
-        repo.addStudent(student);
+        studentDao.addStudent(student);
         return student;
     }
 
@@ -32,7 +38,7 @@ public class StudentResource {
     public Student updateStudent(Student student)
     {
 
-         repo.updateStudent(student);
+         studentDao.updateStudent(student);
          return student;
     }
 
@@ -40,6 +46,6 @@ public class StudentResource {
     @Path("student/{id}")
     public void deleteStudent(@PathParam("id") int id)
     {
-          repo.deleteStudent(id);
+          studentDao.deleteStudent(id);
     }
 }

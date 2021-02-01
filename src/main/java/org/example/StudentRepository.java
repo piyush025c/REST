@@ -1,117 +1,69 @@
 package org.example;
 
+
+
+import dao.StudentDao;
+import dao.StudentRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.*;
-
-public class StudentRepository {
 
 
-    Connection con=null;
+public class StudentRepository implements StudentDao {
 
-    StudentRepository()
-    {
+    JdbcTemplate template;
 
-        String url="jdbc:postgresql://localhost:5432/demoDB";
-        String username="postgres";
-        String password="root";
-
-        try {
-            Class.forName("org.postgresql.Driver");
-            con=DriverManager.getConnection(url,username,password);
-
-            if(con!=null)
-            System.out.println("Database connection established.");
-
-        } catch (Exception e) {
-            System.out.println("Connection problem "+e);
-        }
+    public JdbcTemplate getTemplate() {
+        return template;
     }
 
+    public void setTemplate(JdbcTemplate template) {
+        this.template = template;
+    }
+
+    @Override
     public List<Student> getStudentList()
     {
         List<Student> students = new ArrayList<>();
         String sql="select * from students";
 
-        try {
-            Statement st = con.createStatement();
-            ResultSet rs=st.executeQuery(sql);
+        RowMapper<Student> rowMapper=new StudentRowMapper();
+        return template.query(sql,rowMapper);
 
-            while(rs.next())
-            {
-                Student student=new Student(rs.getInt(1),rs.getString(2),rs.getInt(3));
-                students.add(student);
-            }
-
-            System.out.println("GET working..!");
-        }
-        catch (Exception e)
-        {
-            System.out.println("Something Wrong: "+e);
-        }
-        return students;
     }
 
-
+    @Override
     public void addStudent(Student student) {
 
         String sql="insert into students values(?,?,?)";
+        template.update(sql,student.getRollNo(),student.getName(),student.getAge());
 
-        try{
-            PreparedStatement st= con.prepareStatement(sql);
-
-            st.setInt(1,student.getRollNo());
-            st.setString(2,student.getName());
-            st.setInt(3,student.getAge());
-
-            int res=st.executeUpdate();
-            System.out.println("POST working..!");
-        }
-        catch (Exception e)
-        {
-            System.out.println("Something Wrong: "+e);
-        }
+        System.out.println("POST working..! ");
 
     }
 
+    @Override
     public void updateStudent(Student student)
     {
         String sql="update students set name=? , age=? where rollno=?";
+        int res=template.update(sql,student.getName(),student.getAge(),student.getRollNo());
 
-        try{
-            PreparedStatement st= con.prepareStatement(sql);
+        System.out.println("PUT working..! "+res+" rows affected");
 
-            st.setString(1,student.getName());
-            st.setInt(2,student.getAge());
-            st.setInt(3,student.getRollNo());
 
-            int res=st.executeUpdate();
-            System.out.println("PUT working..!");
-        }
-        catch (Exception e)
-        {
-            System.out.println("Something Wrong: "+e);
-        }
 
     }
 
-
+    @Override
     public void deleteStudent(int rollNo) {
 
         String sql="delete from students where rollno=?";
 
-        try{
-            PreparedStatement st= con.prepareStatement(sql);
+        int res=template.update(sql,rollNo);
 
-            st.setInt(1,rollNo);
-
-            int res=st.executeUpdate();
-            System.out.println("DELETE working..!");
-        }
-        catch (Exception e)
-        {
-            System.out.println("Something Wrong: "+e);
-        }
+        System.out.println("Delete working..! "+res+" rows affected");
 
     }
 }
