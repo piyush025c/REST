@@ -20,8 +20,9 @@
         </property>
     </bean>
 
-    <bean class="org.example.StudentRepositoryHandler" name="studentDao">
-    <property name="template" ref="jdbcTemplate"/>
+    <bean class="org.example.handler.SalesRepHandler" name="salesRepDao">
+        <property name="template" ref="jdbcTemplate"/>
+
     </bean>
 
 </beans>
