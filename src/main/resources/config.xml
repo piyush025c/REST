@@ -28,4 +28,8 @@
         <property name="template" ref="jdbcTemplate"/>
     </bean>
 
+    <bean class="org.example.handler.DrugOfMonthHandler" name="drugOfMonthDao">
+        <property name="template" ref="jdbcTemplate"/>
+    </bean>
+
 </beans>
