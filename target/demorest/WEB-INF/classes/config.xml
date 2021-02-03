@@ -22,7 +22,10 @@
 
     <bean class="org.example.handler.SalesRepHandler" name="salesRepDao">
         <property name="template" ref="jdbcTemplate"/>
+    </bean>
 
+    <bean class="org.example.handler.RepOfMonthHandler" name="repOfMonthDao">
+        <property name="template" ref="jdbcTemplate"/>
     </bean>
 
 </beans>
