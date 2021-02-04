@@ -10,4 +10,5 @@ public interface SalesRepDao {
     public void addSalesRep(SalesRep salesRep);
     public void updateSalesRep(SalesRep salesRep);
     public void deleteSalesRep(int salesRepId);
+    public List<SalesRep> getSearchResult(String prefix,int offset,int limit);
 }

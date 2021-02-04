@@ -61,4 +61,13 @@ public class SalesRepHandler implements SalesRepDao {
         System.out.println("DELETE working.., "+" "+rowsAffected+" row deleted");
 
     }
+
+    @Override
+    public List<SalesRep> getSearchResult(String prefix, int offset, int limit) {
+
+        String sql="select * from sales_rep where UPPER(sales_rep_name) LIKE UPPER('"+prefix+"%') OFFSET ? LIMIT ?";
+
+        SalesRepRowMapper rowMapper=new SalesRepRowMapper();
+        return template.query(sql,rowMapper,offset,limit);
+    }
 }

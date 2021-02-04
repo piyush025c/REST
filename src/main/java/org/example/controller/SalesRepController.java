@@ -49,4 +49,12 @@ public class SalesRepController {
     {
         salesRepDao.deleteSalesRep(salesRepId);
     }
+
+    @GET
+    @Path("search")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<SalesRep> getSearchResult(@QueryParam("prefix") String prefix,@QueryParam("offset") int offset,@QueryParam("limit") int limit)
+    {
+        return salesRepDao.getSearchResult(prefix,offset,limit);
+    }
 }
