@@ -20,6 +20,7 @@ public class SalesRepController {
     @Produces(MediaType.APPLICATION_JSON)
     public List<SalesRep> getAllSalesRep(@QueryParam("offset") int offset,@QueryParam("limit") int limit)
     {
+        System.out.println("GET Called..");
         return salesRepDao.getAllSalesRep(offset,limit);
     }
 

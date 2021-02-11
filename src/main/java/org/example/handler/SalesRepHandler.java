@@ -23,9 +23,12 @@ public class SalesRepHandler implements SalesRepDao {
     public List<SalesRep> getAllSalesRep(int offset,int limit) {
 
         String sql="select * from sales_rep offset "+offset+" limit "+limit;
+        System.out.println("GET Works..");
 
         SalesRepRowMapper rowMapper=new SalesRepRowMapper();
         return template.query(sql,rowMapper);
+
+
     }
 
     @Override
