@@ -20,9 +20,9 @@ public class SalesRepHandler implements SalesRepDao {
     }
 
     @Override
-    public List<SalesRep> getAllSalesRep(int offset,int limit) {
+    public List<SalesRep> getAllSalesRep() {
 
-        String sql="select * from sales_rep offset "+offset+" limit "+limit;
+        String sql="select * from sales_rep";
         System.out.println("GET Works..");
 
         SalesRepRowMapper rowMapper=new SalesRepRowMapper();
@@ -66,11 +66,11 @@ public class SalesRepHandler implements SalesRepDao {
     }
 
     @Override
-    public List<SalesRep> getSearchResult(String prefix, int offset, int limit) {
+    public List<SalesRep> getSearchResult(String prefix) {
 
-        String sql="select * from sales_rep where UPPER(sales_rep_name) LIKE UPPER('"+prefix+"%') OFFSET ? LIMIT ?";
+        String sql="select * from sales_rep where UPPER(sales_rep_name) LIKE UPPER('"+prefix+"%')";
 
         SalesRepRowMapper rowMapper=new SalesRepRowMapper();
-        return template.query(sql,rowMapper,offset,limit);
+        return template.query(sql,rowMapper);
     }
 }

@@ -18,10 +18,10 @@ public class SalesRepController {
     @GET
     @Path("all")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<SalesRep> getAllSalesRep(@QueryParam("offset") int offset,@QueryParam("limit") int limit)
+    public List<SalesRep> getAllSalesRep()
     {
         System.out.println("GET Called..");
-        return salesRepDao.getAllSalesRep(offset,limit);
+        return salesRepDao.getAllSalesRep();
     }
 
     @POST
@@ -54,8 +54,8 @@ public class SalesRepController {
     @GET
     @Path("search")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<SalesRep> getSearchResult(@QueryParam("prefix") String prefix,@QueryParam("offset") int offset,@QueryParam("limit") int limit)
+    public List<SalesRep> getSearchResult(@QueryParam("prefix") String prefix)
     {
-        return salesRepDao.getSearchResult(prefix,offset,limit);
+        return salesRepDao.getSearchResult(prefix);
     }
 }
